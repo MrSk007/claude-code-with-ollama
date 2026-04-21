@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# setup.sh — Claude Code + Ollama Setup Toolkit (macOS/Linux)
+# setup.sh -- Claude Code + Ollama Setup Toolkit (macOS/Linux)
 #
 # Installs and configures Claude Code to use Ollama's native Anthropic-compatible API.
 # Usage: ./setup.sh [--install] [--silent] [--verify] [--help]
@@ -22,7 +22,7 @@ readonly SENTINEL_END="# <<< claude-code-ollama <<<"
 readonly BACKUP_DIR="$HOME/.claude-code-ollama-backup"
 readonly MODEL_NAME_REGEX='^[a-zA-Z0-9_.-]+:[a-zA-Z0-9_.-]+$'
 
-# Model recommendation table — update here when models change
+# Model recommendation table -- update here when models change
 # Format: min_ram_gb:model:size_on_disk_gb:num_ctx
 readonly -a MODEL_TABLE=(
     "0:qwen2.5-coder:3b:2:8192"
@@ -32,13 +32,13 @@ readonly -a MODEL_TABLE=(
     "32:qwen2.5-coder:32b:20:65536"
 )
 
-# Cloud model options — run on Ollama's infrastructure, no local download needed
+# Cloud model options -- run on Ollama's infrastructure, no local download needed
 # Format: model:description
 readonly -a CLOUD_MODELS=(
-    "kimi-k2.5:cloud:Kimi K2.5 — fast cloud model"
-    "glm-5:cloud:GLM 5 — strong general reasoning"
-    "minimax-m2.7:cloud:MiniMax M2.7 — balanced cloud model"
-    "qwen3.5:cloud:Qwen 3.5 — versatile cloud coding model"
+    "kimi-k2.5:cloud:Kimi K2.5 -- fast cloud model"
+    "glm-5:cloud:GLM 5 -- strong general reasoning"
+    "minimax-m2.7:cloud:MiniMax M2.7 -- balanced cloud model"
+    "qwen3.5:cloud:Qwen 3.5 -- versatile cloud coding model"
 )
 
 # ---------------------------------------------------------------------------
@@ -159,7 +159,7 @@ check_prerequisites() {
 
     # Warn if running as root
     if [ "$(id -u)" -eq 0 ]; then
-        warn "Running as root. This is not recommended — Ollama and Claude Code"
+        warn "Running as root. This is not recommended -- Ollama and Claude Code"
         warn "should be installed as your normal user to avoid permission issues."
     fi
 
@@ -300,7 +300,7 @@ recommend_model() {
         # Format: model_name:model_tag:description
         cloud_model="$(echo "$cloud_entry" | cut -d: -f1-2)"
         cloud_desc="$(echo "$cloud_entry" | cut -d: -f3-)"
-        echo "  ${cloud_index}. ${cloud_model}  — ${cloud_desc}"
+        echo "  ${cloud_index}. ${cloud_model}  -- ${cloud_desc}"
         cloud_index=$((cloud_index + 1))
     done
     echo ""
@@ -404,9 +404,9 @@ check_disk_space() {
 }
 
 pull_model() {
-    # Cloud models run on Ollama's servers — no local pull needed
+    # Cloud models run on Ollama's servers -- no local pull needed
     if [ "$IS_CLOUD_MODEL" = true ]; then
-        info "Cloud model selected — no local download needed."
+        info "Cloud model selected -- no local download needed."
         info "Ensuring you are signed in to Ollama..."
         if ollama whoami >/dev/null 2>&1; then
             success "Signed in to Ollama"
@@ -472,7 +472,7 @@ install_claude_code() {
         fi
     fi
 
-    # Verify installation — resolve full path to avoid PATH issues
+    # Verify installation -- resolve full path to avoid PATH issues
     local claude_bin
     claude_bin="$(npm root -g)/.bin/claude"
     if [ ! -f "$claude_bin" ] && ! command -v claude >/dev/null 2>&1; then
@@ -687,7 +687,7 @@ do_verify() {
     fi
     success "Ollama is responding"
 
-    # Phase 1: Model warm-up (skip for cloud models — they run on remote infra)
+    # Phase 1: Model warm-up (skip for cloud models -- they run on remote infra)
     if [ "$IS_CLOUD_MODEL" = true ]; then
         info "Phase 1: Skipping local warm-up (cloud model)"
     else

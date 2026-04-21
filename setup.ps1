@@ -61,7 +61,7 @@ $Script:SENTINEL_END = "# <<< claude-code-ollama <<<"
 $Script:BACKUP_DIR = Join-Path $HOME ".claude-code-ollama-backup"
 $Script:MODEL_NAME_REGEX = '^[a-zA-Z0-9_.-]+:[a-zA-Z0-9_.-]+$'
 
-# Model recommendation table — update here when models change
+# Model recommendation table -- update here when models change
 # Format: min_ram_gb, model, size_on_disk_gb, num_ctx
 $Script:MODEL_TABLE = @(
     @{ MinRam = 0;  Model = "qwen2.5-coder:3b";        Size = "2";   NumCtx = 8192  }
@@ -71,12 +71,12 @@ $Script:MODEL_TABLE = @(
     @{ MinRam = 32; Model = "qwen2.5-coder:32b";       Size = "20";  NumCtx = 65536 }
 )
 
-# Cloud model options — run on Ollama's infrastructure, no local download needed
+# Cloud model options -- run on Ollama's infrastructure, no local download needed
 $Script:CLOUD_MODELS = @(
-    @{ Model = "kimi-k2.5:cloud";            Desc = "Kimi K2.5 — fast cloud model" }
-    @{ Model = "glm-5:cloud";               Desc = "GLM 5 — strong general reasoning" }
-    @{ Model = "minimax-m2.7:cloud";        Desc = "MiniMax M2.7 — balanced cloud model" }
-    @{ Model = "qwen3.5:cloud";             Desc = "Qwen 3.5 — versatile cloud coding model" }
+    @{ Model = "kimi-k2.5:cloud";            Desc = "Kimi K2.5 -- fast cloud model" }
+    @{ Model = "glm-5:cloud";               Desc = "GLM 5 -- strong general reasoning" }
+    @{ Model = "minimax-m2.7:cloud";        Desc = "MiniMax M2.7 -- balanced cloud model" }
+    @{ Model = "qwen3.5:cloud";             Desc = "Qwen 3.5 -- versatile cloud coding model" }
 )
 
 # ---------------------------------------------------------------------------
@@ -278,11 +278,11 @@ function Install-Ollama {
             $InstallerProcess = Start-Process -FilePath $TempInstaller -ArgumentList "/VERYSILENT" -PassThru
             # Don't use -Wait: Ollama installer launches a tray app/service that keeps child processes alive
             if (-not $InstallerProcess.WaitForExit(120000)) {
-                Write-Warn "Installer still running after 120 seconds — continuing anyway."
+                Write-Warn "Installer still running after 120 seconds -- continuing anyway."
             }
         }
         finally {
-            # Installer may still be locked by spawned tray app — don't let cleanup kill the script
+            # Installer may still be locked by spawned tray app -- don't let cleanup kill the script
             Remove-Item $TempInstaller -Force -ErrorAction SilentlyContinue
         }
     }
@@ -355,7 +355,7 @@ function Select-Model {
     Write-Info "Cloud models (run on Ollama's servers, no download):"
     $CloudIndex = 1
     foreach ($Cloud in $Script:CLOUD_MODELS) {
-        Write-Host "  ${CloudIndex}. $($Cloud.Model)  — $($Cloud.Desc)"
+        Write-Host "  ${CloudIndex}. $($Cloud.Model)  -- $($Cloud.Desc)"
         $CloudIndex++
     }
     Write-Host ""
@@ -442,9 +442,9 @@ function Select-Model {
 # ---------------------------------------------------------------------------
 
 function Save-Model {
-    # Cloud models run on Ollama's servers — no local pull needed
+    # Cloud models run on Ollama's servers -- no local pull needed
     if ($Script:IsCloudModel) {
-        Write-Info "Cloud model selected — no local download needed."
+        Write-Info "Cloud model selected -- no local download needed."
         Write-Info "Ensuring you are signed in to Ollama..."
         try {
             $WhoamiOutput = ollama whoami 2>&1 | Out-String
@@ -736,7 +736,7 @@ function Invoke-Verify {
     }
     Write-Success "Ollama is responding"
 
-    # Phase 1: Model warm-up (skip for cloud models — they run on remote infra)
+    # Phase 1: Model warm-up (skip for cloud models -- they run on remote infra)
     if ($Script:IsCloudModel) {
         Write-Info "Phase 1: Skipping local warm-up (cloud model)"
     }
@@ -767,7 +767,7 @@ function Invoke-Verify {
     $VerifyTimeoutSec = $VerifyTimeoutMs / 1000
 
     try {
-        # claude is a .ps1 wrapper on Windows — must run through powershell.exe, not Start-Process directly
+        # claude is a .ps1 wrapper on Windows -- must run through powershell.exe, not Start-Process directly
         $ClaudeCmd = "claude -p 'respond with OK' --model '$($Script:SelectedModel)'"
         $Process = Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile", "-Command", $ClaudeCmd -NoNewWindow -PassThru -RedirectStandardOutput "$env:TEMP\claude-verify-out.txt" -RedirectStandardError "$env:TEMP\claude-verify-err.txt"
 
